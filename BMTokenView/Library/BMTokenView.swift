@@ -370,13 +370,13 @@ class TokenTextField: UITextField {
 
 fileprivate extension String {
     func widthOfString(usingFont font: UIFont) -> CGFloat {
-        let size = self.size(attributes: [NSFontAttributeName:font])
+        let size = self.size(withAttributes: [NSAttributedStringKey.font:font])
         return size.width
     }
     
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSFontAttributeName: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: font], context: nil)
         return boundingBox.height
     }
     
