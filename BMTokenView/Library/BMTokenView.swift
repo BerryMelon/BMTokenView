@@ -10,38 +10,40 @@ import Foundation
 import UIKit
 
 struct BMTokenViewSettings {
-    var margins:UIEdgeInsets = UIEdgeInsetsMake(16.0,16.0,16.0,16.0)
-    var textMargin:CGFloat = 8.0
-    var tokenHeight:CGFloat = 18.0
-    var tokenXMargin:CGFloat = 8.0
-    var tokenYMargin:CGFloat = 8.0
+    var margins:UIEdgeInsets = UIEdgeInsetsMake(0,0,0,0)
+    var textMargin:CGFloat = 16.0
+    var tokenHeight:CGFloat = 30.0
+    var tokenXMargin:CGFloat = 4.0
+    var tokenYMargin:CGFloat = 4.0
     var isRound:Bool = true
     var font:UIFont = UIFont.systemFont(ofSize: 12.0)
     var tintColor:UIColor = UIColor.black
-    var textColor:UIColor = UIColor.black
-    var textColorSelected:UIColor = UIColor.white
-    var tokenViewBackgroundColor:UIColor = UIColor.white
-    var tokenViewBackgroundColorSelected:UIColor = UIColor.black
+    var textColor:UIColor = UIColor.white
+    var textColorSelected:UIColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1.0)
+    var tokenViewBackgroundColor:UIColor = UIColor(red: 34/255, green: 34/255, blue: 34/255, alpha: 1.0)
+    var tokenViewBackgroundColorSelected:UIColor = UIColor.white
     var firstResponderAtStart:Bool = true
+    var canSelectTokens:Bool = true
 }
 
 typealias TokenViewData = String
 
 @objc protocol BMTokenViewDatasource {
-    func tokenViewNumberOfItems() -> Int
-    func tokenViewDataForItem(atIndex index:Int) -> TokenViewData
-    func canEditTokenView() -> Bool
+    func tokenViewNumberOfItems(tokenView:BMTokenView) -> Int
+    func tokenViewDataForItem(tokenView:BMTokenView,atIndex index:Int) -> TokenViewData
+    func canEditTokenView(tokenView:BMTokenView) -> Bool
 }
 
 @objc protocol BMTokenViewDelegate {
     @objc optional func tokenViewHeightUpdated(tokenView:BMTokenView, height:CGFloat) -> ()
-    @objc optional func tokenViewDidDrawView(view:BMToken) -> () // for more customizing
+    @objc optional func tokenViewDidDrawView(tokenView:BMTokenView, view:BMToken) -> () // for more customizing
     
     @objc optional func tokenViewDidBeganEditing(tokenView:BMTokenView, text:String) -> ()
     @objc optional func tokenViewShouldReturn(tokenView:BMTokenView, text:String) -> ()
     @objc optional func tokenViewChangedText(tokenView:BMTokenView, text:String) -> ()
     
     @objc optional func tokenViewWillDeleteToken(tokenView:BMTokenView, index:Int) -> ()
+    @objc optional func tokenViewDidTapToken(tokenView:BMTokenView, index:Int) -> ()
 }
 
 @objc class BMTokenView:UIView {
@@ -50,7 +52,7 @@ typealias TokenViewData = String
     @IBOutlet public weak var delegate:BMTokenViewDelegate? = nil
     @IBOutlet public var heightConstraint:NSLayoutConstraint? = nil
     
-    private var textField:TokenTextField? = nil
+    var textField:TokenTextField? = nil
     var isEditing:Bool = false {
         willSet (newVal) {
             if !newVal {
@@ -61,7 +63,7 @@ typealias TokenViewData = String
         }
     }
     
-    private var tokenViews = [BMToken]()
+    var tokenViews = [BMToken]()
     private var initialHeight:CGFloat = 0.0
     private var marginView:UIView? = nil
     
@@ -91,7 +93,7 @@ typealias TokenViewData = String
         self.textField?.becomeFirstResponder()
     }
     
-    public func addTokenViewData() {
+    public func addedTokenViewData() {
         self.textField?.text = ""
         self.reloadData()
     }
@@ -109,9 +111,9 @@ typealias TokenViewData = String
         else {
             self.initialHeight = self.heightConstraint?.constant ?? self.frame.size.height
         }
-
-        let canEdit = self.datasource?.canEditTokenView() ?? false
-        let numberOfItems = self.datasource?.tokenViewNumberOfItems() ?? 0
+        
+        let canEdit = self.datasource?.canEditTokenView(tokenView:self) ?? false
+        let numberOfItems = self.datasource?.tokenViewNumberOfItems(tokenView:self) ?? 0
         let lineHeight:CGFloat = self.initialHeight - (settings.margins.top + settings.margins.bottom)
         let minTokenHeight:CGFloat = settings.tokenHeight > lineHeight ? lineHeight : settings.tokenHeight
         let lineWidth:CGFloat = self.frame.size.width - (settings.margins.left + settings.margins.right)
@@ -125,17 +127,17 @@ typealias TokenViewData = String
             self.marginView?.frame = CGRect(x: settings.margins.left, y: settings.margins.top, width: lineWidth, height: lineHeight)
         }
         let marginView = self.marginView!
-
+        
         // Draw Tokens
         var x:CGFloat = 0.0
         var y:CGFloat = (lineHeight - minTokenHeight) / 2
         var prevTokenHeight:CGFloat = settings.tokenHeight
         for i in 0..<numberOfItems {
-            let title = self.datasource?.tokenViewDataForItem(atIndex: i) ?? ""
+            let title = self.datasource?.tokenViewDataForItem(tokenView:self, atIndex: i) ?? ""
             let numberOfLines:Int = Int(title.heightWithConstrainedWidth(width: lineWidth, font: settings.font) / textHeight)
             let tokenWidth = numberOfLines > 1 ? lineWidth : title.widthOfString(usingFont: self.settings.font) + (settings.textMargin * 2)
             let tokenHeight = numberOfLines > 1 ? settings.tokenHeight * CGFloat(numberOfLines) : settings.tokenHeight
-
+            
             if x + tokenWidth >= lineWidth {
                 // Needs next line
                 x = 0
@@ -150,7 +152,7 @@ typealias TokenViewData = String
             let tokenView = BMToken(frame: rect, title: title, setting: settings, delegate:self)
             tokenView.tag = i
             self.tokenViews.append(tokenView)
-            self.delegate?.tokenViewDidDrawView?(view: tokenView)
+            self.delegate?.tokenViewDidDrawView?(tokenView:self, view: tokenView)
             marginView.addSubview(tokenView)
             x += tokenWidth + settings.tokenXMargin
             prevTokenHeight = tokenHeight
@@ -181,7 +183,7 @@ typealias TokenViewData = String
                 self.textField?.tintColor = settings.tintColor
                 marginView.addSubview(self.textField!)
             }
-
+            
             if settings.firstResponderAtStart {
                 self.textField?.becomeFirstResponder()
             }
@@ -191,12 +193,12 @@ typealias TokenViewData = String
         }
         
     }
-
-    private func hasSeletectedTokenView() -> Int {
+    
+    func hasSeletectedTokenView() -> Int {
         for tokenView in self.tokenViews {
             if tokenView.isSelected {
                 
-                if self.datasource?.canEditTokenView() ?? true {
+                if self.datasource?.canEditTokenView(tokenView: self) ?? true {
                     self.textField?.becomeFirstResponder()
                 }
                 
@@ -261,11 +263,13 @@ extension BMTokenView: UITextFieldDelegate, TokenTextFieldDelegate {
 
 extension BMTokenView: BMTokenDelegate {
     func didTapToken(atIndex index:Int, selected:Bool) {
-        let canEdit = self.datasource?.canEditTokenView() ?? true
-        if !canEdit { return }
+        let canEdit = self.datasource?.canEditTokenView(tokenView: self) ?? true
         
         if selected {
-            self.textField?.becomeFirstResponder()
+            self.delegate?.tokenViewDidTapToken?(tokenView: self, index: index)
+            if canEdit {
+                self.textField?.becomeFirstResponder()
+            }
         }
         
         for token in self.tokenViews {
@@ -320,8 +324,10 @@ class BMToken:UIView {
         
         self.addSubview(titleLabel)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapToken))
-        self.addGestureRecognizer(tapGesture)
+        if setting.canSelectTokens {
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapToken))
+            self.addGestureRecognizer(tapGesture)
+        }
     }
     
     @objc func didTapToken() {
@@ -364,14 +370,13 @@ class TokenTextField: UITextField {
 
 fileprivate extension String {
     func widthOfString(usingFont font: UIFont) -> CGFloat {
-        let fontAttributes = [NSAttributedStringKey.font: font]
-        let size = self.size(withAttributes: fontAttributes)
+        let size = self.size(attributes: [NSFontAttributeName:font])
         return size.width
     }
     
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSFontAttributeName: font], context: nil)
         return boundingBox.height
     }
     
