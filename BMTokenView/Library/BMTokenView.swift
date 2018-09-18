@@ -50,7 +50,7 @@ typealias TokenViewData = String
     @IBOutlet public weak var delegate:BMTokenViewDelegate? = nil
     @IBOutlet public var heightConstraint:NSLayoutConstraint? = nil
     
-    private var textField:TokenTextField? = nil
+    var textField:TokenTextField? = nil
     var isEditing:Bool = false {
         willSet (newVal) {
             if !newVal {
@@ -61,7 +61,7 @@ typealias TokenViewData = String
         }
     }
     
-    private var tokenViews = [BMToken]()
+    var tokenViews = [BMToken]()
     private var initialHeight:CGFloat = 0.0
     private var marginView:UIView? = nil
     
@@ -192,7 +192,7 @@ typealias TokenViewData = String
         
     }
 
-    private func hasSeletectedTokenView() -> Int {
+    func hasSeletectedTokenView() -> Int {
         for tokenView in self.tokenViews {
             if tokenView.isSelected {
                 
@@ -364,14 +364,13 @@ class TokenTextField: UITextField {
 
 fileprivate extension String {
     func widthOfString(usingFont font: UIFont) -> CGFloat {
-        let fontAttributes = [NSAttributedStringKey.font: font]
-        let size = self.size(withAttributes: fontAttributes)
+        let size = self.size(attributes: [NSFontAttributeName:font])
         return size.width
     }
     
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSFontAttributeName: font], context: nil)
         return boundingBox.height
     }
     
