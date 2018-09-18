@@ -8,7 +8,7 @@ BMTokenView let's you create a Token managing view using delegates and datasourc
 ## Installation
 
 You can download/clone the sample app and copy BMTokenView.swift to your project, or simple use pod
-```
+```swift
 pod 'BMTokenView'
 ```
 
@@ -19,14 +19,14 @@ There are two ways to implement the token view.
 ### 1. Manually
   Simply create a BMTokenView as you would create a UIView. Don't forget to setup delegate & datasource.
   Whenever the height of the BMTokenView changes (when a new line is needed to create a new token), 
-  ```
+  ```swift
   func tokenViewHeightUpdated(tokenView:BMTokenView, height:CGFloat) -> ()
   ```
   will be called so you can handle height changes.
   
 ### 2. AutoLayout
   BMTokenView supports autolayout. Just drag an UIView to your viewcontroller and name it BMTokenView. Set it up <b>with an initial height constraint.</b> Connect the heightConstraint to
-  ```
+  ```swift
   @IBOutlet public var heightConstraint:NSLayoutConstraint
   ```
   once connected, BMTokenView's height will be automatically controlled through the constraint.
@@ -36,7 +36,7 @@ There are two ways to implement the token view.
   Similar to an UITableview, BMTokenView doesn't need to know about the data for display. All the data is managed through the datasource, so you can keep the data in an array as you would on a tableview.
   
   There are three datasource callbacks.
-  ```
+  ```swift
   func tokenViewNumberOfItems(tokenView:BMTokenView) -> Int // 1
   func tokenViewDataForItem(tokenView:BMTokenView,atIndex index:Int) -> TokenViewData // 2
   func canEditTokenView(tokenView:BMTokenView) -> Bool // 3
@@ -47,7 +47,7 @@ There are two ways to implement the token view.
   
   
   BMTokenView has 7 optional delegate callbacks which are self explainable. 
-  ```
+  ```swift
   @objc protocol BMTokenViewDelegate {
     @objc optional func tokenViewHeightUpdated(tokenView:BMTokenView, height:CGFloat) -> ()
     @objc optional func tokenViewDidDrawView(tokenView:BMTokenView, view:BMToken) -> () // for more customizing
@@ -66,7 +66,7 @@ There are two ways to implement the token view.
 ## Customization
 
 BMTokenView has a settings value which has bunch of options so that you can manually design your own tokenview. All of the options are self explanatory. 
-```
+```swift
 struct BMTokenViewSettings {
     var margins:UIEdgeInsets = UIEdgeInsetsMake(0,0,0,0)
     var textMargin:CGFloat = 16.0
