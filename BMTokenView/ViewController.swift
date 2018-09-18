@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: BMTokenView!
-    var array = ["Text","Another text", "Something", "Some long text with some more long text", "A", "B", "C", "A even more longer text with even more longer text with more text at the end", "ABC", "A text\nWith return marks \\n\nWhich will have\nMultiple Lines"]
+    var array = ["Text","Another text", "Something", "Some long text with some more long text", "A", "B", "C", "ABC", "Tokens","MoreTokens"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +20,7 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         self.tokenView.settings.margins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        self.tokenView.settings.tokenViewBackgroundColorSelected = UIColor.red
         self.tokenView.reloadData()
         self.tokenView.makeFirstResponder()
     }

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		22B7E2ED2150F012002FE308 /* BMTokenView.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 22B7E2EC2150F012002FE308 /* BMTokenView.podspec */; };
+		22B7E32C2150FB28002FE308 /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 22B7E32A2150FB28002FE308 /* 01.png */; };
+		22B7E32E2150FB49002FE308 /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = 22B7E32D2150FB49002FE308 /* 02.png */; };
 		22C1B6F82150205D00A87078 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C1B6F72150205D00A87078 /* AppDelegate.swift */; };
 		22C1B6FA2150205D00A87078 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C1B6F92150205D00A87078 /* ViewController.swift */; };
 		22C1B6FD2150205D00A87078 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22C1B6FB2150205D00A87078 /* Main.storyboard */; };
@@ -37,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		22B7E2EC2150F012002FE308 /* BMTokenView.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = BMTokenView.podspec; sourceTree = "<group>"; };
+		22B7E32A2150FB28002FE308 /* 01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01.png; sourceTree = "<group>"; };
+		22B7E32D2150FB49002FE308 /* 02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 02.png; sourceTree = "<group>"; };
 		22C1B6F42150205C00A87078 /* BMTokenView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMTokenView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22C1B6F72150205D00A87078 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22C1B6F92150205D00A87078 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +82,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		22B7E3282150FB17002FE308 /* Screenshots */ = {
+			isa = PBXGroup;
+			children = (
+				22B7E32A2150FB28002FE308 /* 01.png */,
+				22B7E32D2150FB49002FE308 /* 02.png */,
+			);
+			path = Screenshots;
+			sourceTree = "<group>";
+		};
 		22C1B6EB2150205C00A87078 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +115,7 @@
 		22C1B6F62150205D00A87078 /* BMTokenView */ = {
 			isa = PBXGroup;
 			children = (
+				22B7E3282150FB17002FE308 /* Screenshots */,
 				22C1B725215020ED00A87078 /* Library */,
 				22C1B6F72150205D00A87078 /* AppDelegate.swift */,
 				22C1B6F92150205D00A87078 /* ViewController.swift */,
@@ -244,7 +258,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				22C1B7022150205E00A87078 /* LaunchScreen.storyboard in Resources */,
+				22B7E32C2150FB28002FE308 /* 01.png in Resources */,
 				22C1B6FF2150205E00A87078 /* Assets.xcassets in Resources */,
+				22B7E32E2150FB49002FE308 /* 02.png in Resources */,
 				22B7E2ED2150F012002FE308 /* BMTokenView.podspec in Resources */,
 				22C1B6FD2150205D00A87078 /* Main.storyboard in Resources */,
 			);
