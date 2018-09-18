@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        self.tokenView.settings.margins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         self.tokenView.reloadData()
         self.tokenView.makeFirstResponder()
     }
@@ -37,7 +38,7 @@ extension ViewController: BMTokenViewDelegate {
     func tokenViewShouldReturn(tokenView: BMTokenView, text: String) {
         print("TokenView Should Return: \(text)")
         self.array.append(text)
-        self.tokenView.addTokenViewData()
+        self.tokenView.addedTokenViewData()
     }
     
     func tokenViewChangedText(tokenView: BMTokenView, text: String) {
@@ -50,14 +51,14 @@ extension ViewController: BMTokenViewDelegate {
 }
 
 extension ViewController: BMTokenViewDatasource {
-    func tokenViewNumberOfItems() -> Int {
+    func tokenViewNumberOfItems(tokenView:BMTokenView) -> Int {
         return array.count
     }
-    func tokenViewDataForItem(atIndex index:Int) -> TokenViewData {
+    func tokenViewDataForItem(tokenView:BMTokenView, atIndex index:Int) -> TokenViewData {
         let text = array[index]
         return text
     }
-    func canEditTokenView() -> Bool {
-        return false
+    func canEditTokenView(tokenView:BMTokenView) -> Bool {
+        return true
     }
 }
