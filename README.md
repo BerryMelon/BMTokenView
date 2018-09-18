@@ -25,11 +25,11 @@ There are two ways to implement the token view.
   will be called so you can handle height changes.
   
 ### 2. AutoLayout
-  BMTokenView supports autolayout. Just drag an UIView to your viewcontroller, and set it up <b>with an initial height constraint.</b> Connect the heightConstraint to
+  BMTokenView supports autolayout. Just drag an UIView to your viewcontroller and name it BMTokenView. Set it up <b>with an initial height constraint.</b> Connect the heightConstraint to
   ```
   @IBOutlet public var heightConstraint:NSLayoutConstraint
   ```
-  once connected, BMTokenView's height will be automatacally controlled through the constraint.
+  once connected, BMTokenView's height will be automatically controlled through the constraint.
 
 ## Usage
 
