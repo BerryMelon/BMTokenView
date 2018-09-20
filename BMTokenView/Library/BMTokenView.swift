@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-struct BMTokenViewSettings {
-    var margins:UIEdgeInsets = UIEdgeInsetsMake(0,0,0,0)
+public struct BMTokenViewSettings {
+    var margins:UIEdgeInsets = UIEdgeInsets.init(top: 0,left: 0,bottom: 0,right: 0)
     var textMargin:CGFloat = 16.0
     var tokenHeight:CGFloat = 30.0
     var tokenXMargin:CGFloat = 4.0
@@ -26,15 +26,15 @@ struct BMTokenViewSettings {
     var canSelectTokens:Bool = true
 }
 
-typealias TokenViewData = String
+public typealias TokenViewData = String
 
-@objc protocol BMTokenViewDatasource {
+@objc public protocol BMTokenViewDatasource {
     func tokenViewNumberOfItems(tokenView:BMTokenView) -> Int
     func tokenViewDataForItem(tokenView:BMTokenView,atIndex index:Int) -> TokenViewData
     func canEditTokenView(tokenView:BMTokenView) -> Bool
 }
 
-@objc protocol BMTokenViewDelegate {
+@objc public protocol BMTokenViewDelegate {
     @objc optional func tokenViewHeightUpdated(tokenView:BMTokenView, height:CGFloat) -> ()
     @objc optional func tokenViewDidDrawView(tokenView:BMTokenView, view:BMToken) -> () // for more customizing
     
@@ -46,7 +46,7 @@ typealias TokenViewData = String
     @objc optional func tokenViewDidTapToken(tokenView:BMTokenView, index:Int) -> ()
 }
 
-@objc class BMTokenView:UIView {
+@objc public class BMTokenView:UIView {
     public var settings = BMTokenViewSettings()
     @IBOutlet public weak var datasource:BMTokenViewDatasource? = nil
     @IBOutlet public weak var delegate:BMTokenViewDelegate? = nil
@@ -211,19 +211,19 @@ typealias TokenViewData = String
 }
 
 extension BMTokenView: UITextFieldDelegate, TokenTextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    private func textFieldDidBeginEditing(_ textField: UITextField) {
         self.delegate?.tokenViewDidBeganEditing?(tokenView: self, text: textField.text ?? "")
         self.isEditing = true
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.delegate?.tokenViewShouldReturn?(tokenView: self, text: textField.text ?? "")
         self.textField?.resignFirstResponder()
         self.isEditing = false
         return true
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    private func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         guard let text = textField.text, let textRange = Range(range, in: text) else {
             return true
         }
@@ -283,7 +283,8 @@ extension BMTokenView: BMTokenDelegate {
 protocol BMTokenDelegate: class {
     func didTapToken(atIndex index:Int, selected:Bool)
 }
-class BMToken:UIView {
+
+public class BMToken:UIView {
     
     var titleLabel:UILabel!
     let setting:BMTokenViewSettings
@@ -370,13 +371,13 @@ class TokenTextField: UITextField {
 
 fileprivate extension String {
     func widthOfString(usingFont font: UIFont) -> CGFloat {
-        let size = self.size(withAttributes: [NSAttributedStringKey.font:font])
+        let size = self.size(withAttributes: [NSAttributedString.Key.font:font])
         return size.width
     }
     
     func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedStringKey.font: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [NSAttributedString.Key.font: font], context: nil)
         return boundingBox.height
     }
     
