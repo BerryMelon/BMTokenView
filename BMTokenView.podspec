@@ -16,9 +16,9 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "BMTokenView"
-  s.version      = "1.0"
+  s.version      = "1.1"
   s.summary      = "BMTokenView is a simple UIView subclass that let's you customize Token Views"
-  s.swift_version = "4.0"
+  s.swift_version = "4.2"
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -81,7 +81,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/BerryMelon/BMTokenView.git", :tag => '1.0'}
+  s.source       = { :git => "https://github.com/BerryMelon/BMTokenView.git", :tag => '1.1'}
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
